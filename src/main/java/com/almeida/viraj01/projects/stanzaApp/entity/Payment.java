@@ -24,7 +24,7 @@ public class Payment {
     private String transactionId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)s
+    @Column(nullable = false)
     private PaymentStatus paymentStatus;
 
     @Column(nullable = false, precision = 10, scale = 2)
