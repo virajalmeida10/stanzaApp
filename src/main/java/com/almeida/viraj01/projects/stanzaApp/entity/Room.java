@@ -1,5 +1,6 @@
 package com.almeida.viraj01.projects.stanzaApp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

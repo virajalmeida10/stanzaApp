@@ -1,6 +1,10 @@
 package com.almeida.viraj01.projects.stanzaApp.service;
 
 import com.almeida.viraj01.projects.stanzaApp.dto.HotelDto;
+import com.almeida.viraj01.projects.stanzaApp.dto.HotelInfoDto;
+import com.almeida.viraj01.projects.stanzaApp.dto.HotelInfoRequestDto;
+
+import java.util.List;
 
 public interface HotelService {
     HotelDto createNewHotel(HotelDto hotelDto);
@@ -13,4 +17,7 @@ public interface HotelService {
 
     void activateHotel(Long hotelId);
 
+    HotelInfoDto getHotelInfoById(Long hotelId, HotelInfoRequestDto hotelInfoRequestDto);
+
+    List<HotelDto> getAllHotels();
 }

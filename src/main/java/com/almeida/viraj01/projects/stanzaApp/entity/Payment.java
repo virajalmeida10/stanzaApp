@@ -1,3 +1,4 @@
+/*
 package com.almeida.viraj01.projects.stanzaApp.entity;
 
 import com.almeida.viraj01.projects.stanzaApp.entity.enums.PaymentStatus;
@@ -36,3 +37,4 @@ public class Payment {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 }
+*/
