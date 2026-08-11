@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.almeida.viraj01.projects.stanzaApp.util.AppUtils.getCurrentUser;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j

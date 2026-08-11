@@ -1,5 +1,8 @@
 package com.almeida.viraj01.projects.stanzaApp.service;
 
+import com.almeida.viraj01.projects.stanzaApp.entity.Booking;
+import com.almeida.viraj01.projects.stanzaApp.entity.User;
+import com.almeida.viraj01.projects.stanzaApp.repository.BookingRepository;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 import com.stripe.model.checkout.Session;

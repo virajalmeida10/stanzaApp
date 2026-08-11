@@ -2,6 +2,7 @@ package com.almeida.viraj01.projects.stanzaApp.controller;
 
 import com.almeida.viraj01.projects.stanzaApp.dto.RoomDto;
 import com.almeida.viraj01.projects.stanzaApp.service.RoomService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

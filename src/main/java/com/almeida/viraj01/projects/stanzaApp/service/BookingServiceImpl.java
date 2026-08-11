@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.almeida.viraj01.projects.stanzaApp.util.AppUtils.getCurrentUser;
-import static com.codingshuttle.projects.airBnbApp.util.AppUtils.getCurrentUser;
 
 @Service
 @Slf4j

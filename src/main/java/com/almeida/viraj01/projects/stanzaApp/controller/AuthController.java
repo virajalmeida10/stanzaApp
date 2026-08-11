@@ -4,6 +4,7 @@ import com.almeida.viraj01.projects.stanzaApp.dto.LoginDto;
 import com.almeida.viraj01.projects.stanzaApp.dto.LoginResponseDto;
 import com.almeida.viraj01.projects.stanzaApp.dto.SignUpRequestDto;
 import com.almeida.viraj01.projects.stanzaApp.dto.UserDto;
+import com.almeida.viraj01.projects.stanzaApp.security.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
