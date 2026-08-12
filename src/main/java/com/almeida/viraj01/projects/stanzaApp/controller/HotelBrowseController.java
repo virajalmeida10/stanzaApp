@@ -21,7 +21,7 @@ public class HotelBrowseController {
     private final InventoryService inventoryService;
     private final HotelService hotelService;
 
-    @GetMapping("/search")
+    @PostMapping("/search")
     @Operation(summary = "Search hotels", tags = {"Browse Hotels"})
     public ResponseEntity<Page<HotelPriceResponseDto>> searchHotels(@RequestBody HotelSearchRequest hotelSearchRequest) {
 
@@ -29,7 +29,7 @@ public class HotelBrowseController {
         return ResponseEntity.ok(page);
     }
 
-    @GetMapping("/{hotelId}/info")
+    @PostMapping("/{hotelId}/info")
     @Operation(summary = "Get a hotel info by hotelId", tags = {"Browse Hotels"})
     public ResponseEntity<HotelInfoDto> getHotelInfo(@PathVariable Long hotelId, @RequestBody HotelInfoRequestDto hotelInfoRequestDto) {
         return ResponseEntity.ok(hotelService.getHotelInfoById(hotelId, hotelInfoRequestDto));
