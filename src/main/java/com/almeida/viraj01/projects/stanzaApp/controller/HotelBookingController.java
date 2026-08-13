@@ -52,4 +52,11 @@ public class HotelBookingController {
     public ResponseEntity<BookingStatusResponseDto> getBookingStatus(@PathVariable Long bookingId) {
         return ResponseEntity.ok(new BookingStatusResponseDto(bookingService.getBookingStatus(bookingId)));
     }
+
+    @DeleteMapping("/{bookingId}")
+    @Operation(summary = "Cancel/remove an unpaid booking and free the room", tags = {"Booking Flow"})
+    public ResponseEntity<Void> cancelUnpaidBooking(@PathVariable Long bookingId) {
+        bookingService.cancelUnpaidBooking(bookingId);
+        return ResponseEntity.noContent().build();
+    }
 }

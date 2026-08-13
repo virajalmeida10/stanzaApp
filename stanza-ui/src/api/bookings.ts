@@ -16,6 +16,9 @@ export async function initiatePayment(bookingId: number): Promise<string> {
 export async function cancelBooking(bookingId: number): Promise<void> {
     await api.post(`/bookings/${bookingId}/cancel`, null);
 }
+export async function cancelUnpaidBooking(bookingId: number): Promise<void> {
+    await api.delete(`/bookings/${bookingId}`);
+}
 export async function getBookingStatus(bookingId: number): Promise<BookingStatus> {
     const { data } = await api.get<{ bookingStatus: BookingStatus }>(`/bookings/${bookingId}/status`);
     return data.bookingStatus;

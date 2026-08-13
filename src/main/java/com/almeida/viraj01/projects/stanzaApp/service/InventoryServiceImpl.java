@@ -70,9 +70,12 @@ public class InventoryServiceImpl implements InventoryService{
         long dateCount =
                 ChronoUnit.DAYS.between(hotelSearchRequest.getStartDate(), hotelSearchRequest.getEndDate()) + 1;
 
-        // business logic - 90 days
+        // Blank/empty city => browse all cities
+        String city = (hotelSearchRequest.getCity() == null || hotelSearchRequest.getCity().isBlank())
+                ? null : hotelSearchRequest.getCity();
+
         Page<HotelPriceDto> hotelPage =
-                hotelMinPriceRepository.findHotelsWithAvailableInventory(hotelSearchRequest.getCity(),
+                hotelMinPriceRepository.findHotelsWithAvailableInventory(city,
                         hotelSearchRequest.getStartDate(), hotelSearchRequest.getEndDate(), hotelSearchRequest.getRoomsCount(),
                         dateCount, pageable);
 
@@ -81,7 +84,6 @@ public class InventoryServiceImpl implements InventoryService{
             hotelPriceResponseDto.setPrice(hotelPriceDto.getPrice());
             return hotelPriceResponseDto;
         });
-
     }
 
     @Override

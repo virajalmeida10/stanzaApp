@@ -14,13 +14,21 @@ import java.util.Optional;
 
 public interface HotelMinPriceRepository extends JpaRepository<HotelMinPrice, Long> {
 
-    @Query("""
+    @Query(value = """
             SELECT new com.almeida.viraj01.projects.stanzaApp.dto.HotelPriceDto(i.hotel, AVG(i.price))
             FROM HotelMinPrice i
-            WHERE i.hotel.city = :city
+            WHERE (:city IS NULL OR i.hotel.city = :city)
                 AND i.date BETWEEN :startDate AND :endDate
                 AND i.hotel.active = true
            GROUP BY i.hotel
+           ORDER BY i.hotel.name
+           """,
+            countQuery = """
+            SELECT COUNT(DISTINCT i.hotel)
+            FROM HotelMinPrice i
+            WHERE (:city IS NULL OR i.hotel.city = :city)
+                AND i.date BETWEEN :startDate AND :endDate
+                AND i.hotel.active = true
            """)
     Page<HotelPriceDto> findHotelsWithAvailableInventory(
             @Param("city") String city,

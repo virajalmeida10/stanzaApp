@@ -26,7 +26,7 @@ export default function HotelCard({ hotel, query }: { hotel: HotelPriceResponse;
                     ))}
                 </div>
                 <p className="pt-1 text-lg font-bold text-indigo-600">
-                    ₹{Math.round(hotel.price)} <span className="text-sm font-normal text-slate-400">/ night</span>
+                    ${Math.round(hotel.price)} <span className="text-sm font-normal text-slate-400">/ night</span>
                 </p>
             </div>
         </button>

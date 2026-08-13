@@ -47,6 +47,7 @@ public class BookingServiceImpl implements BookingService{
     private final InventoryRepository inventoryRepository;
     private final CheckoutService checkoutService;
     private final PricingService pricingService;
+    private final OfferService offerService;
 
     @Value("${frontend.url}")
     private String frontendUrl;
@@ -67,7 +68,8 @@ public class BookingServiceImpl implements BookingService{
         List<Inventory> inventoryList = inventoryRepository.findAndLockAvailableInventory(room.getId(),
                 bookingRequest.getCheckInDate(), bookingRequest.getCheckOutDate(), bookingRequest.getRoomsCount());
 
-        long daysCount = ChronoUnit.DAYS.between(bookingRequest.getCheckInDate(), bookingRequest.getCheckOutDate())+1;
+        // Nights = calendar days between check-in and check-out (check-out day is NOT charged/booked).
+        long daysCount = ChronoUnit.DAYS.between(bookingRequest.getCheckInDate(), bookingRequest.getCheckOutDate());
 
         if (inventoryList.size() != daysCount) {
             throw new IllegalStateException("Room is not available anymore");
@@ -79,6 +81,19 @@ public class BookingServiceImpl implements BookingService{
 
         BigDecimal priceForOneRoom = pricingService.calculateTotalPrice(inventoryList);
         BigDecimal totalPrice = priceForOneRoom.multiply(BigDecimal.valueOf(bookingRequest.getRoomsCount()));
+
+        // Extra-guest surcharge: first 2 guests are included; each additional guest adds 30% of the room total.
+        int guestCount = bookingRequest.getGuestCount() != null ? bookingRequest.getGuestCount() : 2;
+        int extraGuests = Math.max(0, guestCount - 2);
+        if (extraGuests > 0) {
+            BigDecimal surcharge = totalPrice
+                    .multiply(BigDecimal.valueOf(0.30))
+                    .multiply(BigDecimal.valueOf(extraGuests));
+            totalPrice = totalPrice.add(surcharge);
+        }
+
+        // Apply promotional offer discount (server-side, authoritative)
+        totalPrice = offerService.applyOffer(bookingRequest.getOfferCode(), hotel.getCity(), totalPrice);
 
         Booking booking = Booking.builder()
                 .bookingStatus(BookingStatus.RESERVED)
@@ -215,6 +230,35 @@ public class BookingServiceImpl implements BookingService{
         } catch (StripeException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    @Transactional
+    public void cancelUnpaidBooking(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(
+                () -> new ResourceNotFoundException("Booking not found with id: "+bookingId)
+        );
+        User user = getCurrentUser();
+        if (!user.equals(booking.getUser())) {
+            throw new UnAuthorisedException("Booking does not belong to this user with id: "+user.getId());
+        }
+
+        if (booking.getBookingStatus() != BookingStatus.RESERVED
+                && booking.getBookingStatus() != BookingStatus.GUESTS_ADDED
+                && booking.getBookingStatus() != BookingStatus.PAYMENTS_PENDING) {
+            throw new IllegalStateException("Only unpaid bookings (reserved or payment-pending) can be released");
+        }
+
+        // Release the held inventory so the room becomes available to others again
+        inventoryRepository.findAndLockReservedInventory(booking.getRoom().getId(), booking.getCheckInDate(),
+                booking.getCheckOutDate(), booking.getRoomsCount());
+        inventoryRepository.releaseReservedInventory(booking.getRoom().getId(), booking.getCheckInDate(),
+                booking.getCheckOutDate(), booking.getRoomsCount());
+
+        booking.setBookingStatus(BookingStatus.CANCELLED);
+        bookingRepository.save(booking);
+
+        log.info("Released unpaid booking with id: {} and freed its inventory", bookingId);
     }
 
     @Override

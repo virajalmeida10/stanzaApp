@@ -14,6 +14,9 @@ export default function BookingFlowPage() {
     const [paying, setPaying] = useState(false);
     const started = useRef(false); // guard StrictMode double-mount so we don't reserve twice
 
+    const guestCount = Number(params.get('guestCount') ?? 2);
+    const offerCode = params.get('offerCode') ?? '';
+
     useEffect(() => {
         if (started.current) return;
         started.current = true;
@@ -23,6 +26,8 @@ export default function BookingFlowPage() {
             checkInDate: params.get('checkInDate')!,
             checkOutDate: params.get('checkOutDate')!,
             roomsCount: Number(params.get('roomsCount') ?? 1),
+            guestCount: Number(params.get('guestCount') ?? 2),
+            offerCode: offerCode || undefined,
         })
             .then(setBooking)
             .catch((e) => setError((e as Error).message));
@@ -54,12 +59,24 @@ export default function BookingFlowPage() {
                     <Row icon={<CalendarDays className="h-4 w-4" />} label="Check in" value={booking.checkInDate} />
                     <Row icon={<CalendarDays className="h-4 w-4" />} label="Check out" value={booking.checkOutDate} />
                     <Row label="Rooms" value={String(booking.roomsCount)} />
+                    <Row label="Guests" value={String(guestCount)} />
+                    {offerCode && <Row label="Offer" value={offerCode} />}
                     <Row label="Status" value={booking.bookingStatus} />
                 </div>
                 <div className="flex items-center justify-between border-t border-slate-200 pt-4">
                     <span className="text-slate-500">Total amount</span>
-                    <span className="text-2xl font-bold text-slate-900">₹{Number(booking.amount).toLocaleString('en-IN')}</span>
+                    <span className="text-2xl font-bold text-slate-900">${Number(booking.amount).toLocaleString('en-US')}</span>
                 </div>
+                {guestCount > 2 && (
+                    <p className="text-xs text-slate-400">
+                        Includes a 30% extra-guest charge for {guestCount - 2} guest(s) beyond the first 2.
+                    </p>
+                )}
+                {offerCode && (
+                    <p className="text-xs text-emerald-600">
+                        Offer <b>{offerCode}</b> applied — discount is already reflected in the total.
+                    </p>
+                )}
                 <p className="text-xs text-slate-400">Your room is held for 10 minutes. Complete payment to confirm.</p>
                 <button onClick={pay} disabled={paying} className="btn-primary w-full">
                     {paying ? 'Redirecting to payment…' : 'Pay with Stripe'}

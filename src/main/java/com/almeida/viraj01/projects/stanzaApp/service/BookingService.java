@@ -22,6 +22,8 @@ public interface BookingService {
 
     void cancelBooking(Long bookingId);
 
+    void cancelUnpaidBooking(Long bookingId);
+
     BookingStatus getBookingStatus(Long bookingId);
 
     List<BookingDto> getAllBookingsByHotelId(Long hotelId);

@@ -22,6 +22,22 @@ export interface Page<T> {
     last: boolean;
 }
 
+export interface Offer {
+    code: string;
+    title: string;
+    description: string;
+    discountPercent: number;
+    cities: string[];
+    image: string;
+}
+
+export interface BookingRequest {
+    hotelId: number; roomId: number;
+    checkInDate: string; checkOutDate: string;
+    roomsCount: number; guestCount: number;
+    offerCode?: string;   // NEW
+}
+
 export interface HotelContactInfo {
     address: string; phoneNumber: string; email: string; location: string;
 }
@@ -49,7 +65,7 @@ export interface HotelInfoRequest {
 }
 export interface BookingRequest {
     hotelId: number; roomId: number;
-    checkInDate: string; checkOutDate: string; roomsCount: number;
+    checkInDate: string; checkOutDate: string; roomsCount: number; guestCount: number;
 }
 export interface GuestDto { id?: number; name: string; gender: Gender; dateOfBirth: string; }
 export interface BookingDto {
