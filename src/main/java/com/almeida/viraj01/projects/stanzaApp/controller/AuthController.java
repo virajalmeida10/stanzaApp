@@ -40,6 +40,10 @@ public class AuthController {
 
         Cookie cookie = new Cookie("refreshToken", tokens[1]);
         cookie.setHttpOnly(true);
+        cookie.setSecure(true);                    // required for cross-site cookies (HTTPS)
+        cookie.setPath("/");
+        cookie.setAttribute("SameSite", "None");   // allow the cookie on cross-site requests (Vercel → Render)
+        cookie.setMaxAge(60 * 60 * 24 * 30);       // keep the login for 30 days
 
         httpServletResponse.addCookie(cookie);
         return ResponseEntity.ok(new LoginResponseDto(tokens[0]));
