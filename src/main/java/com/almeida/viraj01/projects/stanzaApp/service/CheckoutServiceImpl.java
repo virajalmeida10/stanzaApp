@@ -36,6 +36,7 @@ public class CheckoutServiceImpl implements CheckoutService{
 
             SessionCreateParams sessionParams = SessionCreateParams.builder()
                     .setMode(SessionCreateParams.Mode.PAYMENT)
+                    .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
                     .setBillingAddressCollection(SessionCreateParams.BillingAddressCollection.REQUIRED)
                     .setCustomer(customer.getId())
                     .setSuccessUrl(successUrl)
@@ -45,7 +46,7 @@ public class CheckoutServiceImpl implements CheckoutService{
                                     .setQuantity(1L)
                                     .setPriceData(
                                             SessionCreateParams.LineItem.PriceData.builder()
-                                                    .setCurrency("inr")
+                                                    .setCurrency("usd")
                                                     .setUnitAmount(booking.getAmount().multiply(BigDecimal.valueOf(100)).longValue())
                                                     .setProductData(
                                                             SessionCreateParams.LineItem.PriceData.ProductData.builder()
