@@ -48,6 +48,7 @@ public class BookingServiceImpl implements BookingService{
     private final CheckoutService checkoutService;
     private final PricingService pricingService;
     private final OfferService offerService;
+    private final EmailService emailService;
 
     @Value("${frontend.url}")
     private String frontendUrl;
@@ -189,6 +190,8 @@ public class BookingServiceImpl implements BookingService{
                     booking.getCheckOutDate(), booking.getRoomsCount());
 
             log.info("Successfully confirmed the booking for Booking ID: {}", booking.getId());
+            // Send the guest a confirmation email (failures are logged, never break the webhook)
+            emailService.sendBookingConfirmation(booking);
         } else {
             log.warn("Unhandled event type: {}", event.getType());
         }
