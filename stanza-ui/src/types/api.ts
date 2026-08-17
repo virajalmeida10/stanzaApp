@@ -74,6 +74,7 @@ export interface BookingDto {
     checkInDate: string; checkOutDate: string;
     createdAt: string; updatedAt: string;
     bookingStatus: BookingStatus; guests: GuestDto[]; amount: number;
+    hotelName?: string; hotelCity?: string; hotelPhotos?: string[]; roomType?: string;
 }
 export interface UserDto {
     id: number; email: string; name: string;
