@@ -18,6 +18,7 @@ public interface HotelMinPriceRepository extends JpaRepository<HotelMinPrice, Lo
             SELECT new com.almeida.viraj01.projects.stanzaApp.dto.HotelPriceDto(i.hotel, AVG(i.price))
             FROM HotelMinPrice i
             WHERE (:city IS NULL OR i.hotel.city = :city)
+                AND (:name IS NULL OR LOWER(i.hotel.name) LIKE LOWER(CONCAT('%', :name, '%')))
                 AND i.date BETWEEN :startDate AND :endDate
                 AND i.hotel.active = true
            GROUP BY i.hotel
@@ -27,11 +28,13 @@ public interface HotelMinPriceRepository extends JpaRepository<HotelMinPrice, Lo
             SELECT COUNT(DISTINCT i.hotel)
             FROM HotelMinPrice i
             WHERE (:city IS NULL OR i.hotel.city = :city)
+                AND (:name IS NULL OR LOWER(i.hotel.name) LIKE LOWER(CONCAT('%', :name, '%')))
                 AND i.date BETWEEN :startDate AND :endDate
                 AND i.hotel.active = true
            """)
     Page<HotelPriceDto> findHotelsWithAvailableInventory(
             @Param("city") String city,
+            @Param("name") String name,
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate,
             @Param("roomsCount") Integer roomsCount,

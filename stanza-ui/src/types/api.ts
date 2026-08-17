@@ -57,9 +57,10 @@ export interface RoomPriceResponse {
 export interface HotelInfo { hotel: HotelDto; rooms: RoomPriceResponse[]; }
 
 export interface SearchRequest {
-    city: string; startDate: string; endDate: string;
+    city: string; name?: string; startDate: string; endDate: string;
     roomsCount: number; page?: number; size?: number;
 }
+
 export interface HotelInfoRequest {
     startDate: string; endDate: string; roomsCount: number;
 }

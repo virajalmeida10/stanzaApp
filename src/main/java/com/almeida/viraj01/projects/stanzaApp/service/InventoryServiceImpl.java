@@ -73,9 +73,13 @@ public class InventoryServiceImpl implements InventoryService{
         // Blank/empty city => browse all cities
         String city = (hotelSearchRequest.getCity() == null || hotelSearchRequest.getCity().isBlank())
                 ? null : hotelSearchRequest.getCity();
+        // Blank/empty name => no name filter
+        String name = (hotelSearchRequest.getName() == null || hotelSearchRequest.getName().isBlank())
+                ? null : hotelSearchRequest.getName();
 
+        // business logic - 90 days
         Page<HotelPriceDto> hotelPage =
-                hotelMinPriceRepository.findHotelsWithAvailableInventory(city,
+                hotelMinPriceRepository.findHotelsWithAvailableInventory(city, name,
                         hotelSearchRequest.getStartDate(), hotelSearchRequest.getEndDate(), hotelSearchRequest.getRoomsCount(),
                         dateCount, pageable);
 
@@ -84,6 +88,7 @@ public class InventoryServiceImpl implements InventoryService{
             hotelPriceResponseDto.setPrice(hotelPriceDto.getPrice());
             return hotelPriceResponseDto;
         });
+
     }
 
     @Override

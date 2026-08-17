@@ -53,7 +53,6 @@ export default function HomePage() {
             <section className="space-y-5">
                 <div className="flex items-center justify-between">
                     <h2 className="text-xl font-semibold text-slate-900">All hotels</h2>
-                    {data && <span className="text-sm text-slate-500">{data.totalElements} available</span>}
                 </div>
 
                 {isLoading && <Spinner label="Loading hotels…" />}

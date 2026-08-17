@@ -3,6 +3,7 @@ package com.almeida.viraj01.projects.stanzaApp.repository;
 import com.almeida.viraj01.projects.stanzaApp.entity.Booking;
 import com.almeida.viraj01.projects.stanzaApp.entity.Hotel;
 import com.almeida.viraj01.projects.stanzaApp.entity.User;
+import com.almeida.viraj01.projects.stanzaApp.entity.enums.BookingStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
@@ -18,4 +19,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findByHotelAndCreatedAtBetween(Hotel hotel, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     List<Booking> findByUser(User user);
+
+    // For the auto-expiry scheduler
+    List<Booking> findByBookingStatusAndUpdatedAtBefore(BookingStatus status, LocalDateTime cutoff);
+
+    List<Booking> findByBookingStatusAndCreatedAtBefore(BookingStatus status, LocalDateTime cutoff);
 }

@@ -10,6 +10,7 @@ import BookingFlowPage from './pages/BookingFlowPage';
 import PaymentStatusPage from './pages/PaymentStatusPage';
 import MyBookingsPage from './pages/MyBookingsPage';
 import ProfilePage from './pages/ProfilePage';
+import OfferDealPage from './pages/OfferDealPage';
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
           <Route path="/payments/:bookingId/status" element={<ProtectedRoute><PaymentStatusPage /></ProtectedRoute>} />
           <Route path="/my-bookings" element={<ProtectedRoute><MyBookingsPage /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+          <Route path="/offers/:code" element={<OfferDealPage />} />
         </Routes>
       </Layout>
   );
