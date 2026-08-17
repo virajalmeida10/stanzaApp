@@ -73,13 +73,15 @@ public class InventoryServiceImpl implements InventoryService{
         // Blank/empty city => browse all cities
         String city = (hotelSearchRequest.getCity() == null || hotelSearchRequest.getCity().isBlank())
                 ? null : hotelSearchRequest.getCity();
-        // Blank/empty name => no name filter
-        String name = (hotelSearchRequest.getName() == null || hotelSearchRequest.getName().isBlank())
-                ? null : hotelSearchRequest.getName();
+        // Build a case-insensitive LIKE pattern in Java (always a real String, never a typeless null).
+        // Empty name => "%%" which matches every hotel (i.e. no name filter).
+        String rawName = (hotelSearchRequest.getName() == null || hotelSearchRequest.getName().isBlank())
+                ? "" : hotelSearchRequest.getName().trim().toLowerCase();
+        String namePattern = "%" + rawName + "%";
 
         // business logic - 90 days
         Page<HotelPriceDto> hotelPage =
-                hotelMinPriceRepository.findHotelsWithAvailableInventory(city, name,
+                hotelMinPriceRepository.findHotelsWithAvailableInventory(city, namePattern,
                         hotelSearchRequest.getStartDate(), hotelSearchRequest.getEndDate(), hotelSearchRequest.getRoomsCount(),
                         dateCount, pageable);
 
