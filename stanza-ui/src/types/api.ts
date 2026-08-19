@@ -64,6 +64,18 @@ export interface SearchRequest {
 export interface HotelInfoRequest {
     startDate: string; endDate: string; roomsCount: number;
 }
+
+// AI assistant
+export interface AssistantRequest { message: string; }
+export interface AssistantResponse {
+    reply: string;
+    hotels: HotelPriceResponse[];
+    city: string | null;
+    amenities: string[];
+    checkInDate: string | null;
+    checkOutDate: string | null;
+}
+
 export interface BookingRequest {
     hotelId: number; roomId: number;
     checkInDate: string; checkOutDate: string; roomsCount: number; guestCount: number;

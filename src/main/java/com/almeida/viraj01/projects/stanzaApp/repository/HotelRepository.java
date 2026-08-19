@@ -10,4 +10,13 @@ import java.util.List;
 @Repository
 public interface HotelRepository extends JpaRepository<Hotel, Long> {
     List<Hotel> findByOwner(User user);
+
+    // ----- Used by the AI assistant for "how many hotels" questions -----
+    long countByActiveTrue();
+
+    long countByActiveTrueAndCityIgnoreCase(String city);
+
+    List<Hotel> findByActiveTrue();
+
+    List<Hotel> findByActiveTrueAndCityIgnoreCase(String city);
 }
